@@ -2,7 +2,7 @@ name: Base Image
 on:
   workflow_dispatch: null
   push:
-    paths: ['Dockerfile', 'jupyter-ai.yml']
+    paths: ['base/*']
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,7 +19,7 @@ jobs:
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
       - name: Build the Docker image
-        run: docker build -f Dockerfile . --tag ghcr.io/schmidtdse/base:latest
+        run: docker build base --tag ghcr.io/schmidtdse/base:latest
       - name: Publish
         run: docker push ghcr.io/schmidtdse/base:latest
 

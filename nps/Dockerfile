@@ -1,4 +1,5 @@
-FROM ghcr.io/schmidtdse/base 
+ARG BASE=ghcr.io/schmidtdse/base 
+FROM $BASE
 
 COPY vscode-extensions.txt vscode-extensions.txt
 RUN xargs -n 1 code-server --install-extension < vscode-extensions.txt

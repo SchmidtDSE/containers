@@ -7,6 +7,7 @@ FROM $BASE
 
 # Make code-server extensions etc persist to container, not hub
 ENV XDG_DATA_HOME=/opt/share
+ENV PATH=/opt/share/pixi/bin:$PATH
 
 USER root
 # code-server (VSCode)
@@ -18,6 +19,9 @@ RUN bash /tmp/install_utilities.sh
 
 ## Grant user sudoer privileges
 RUN adduser "$NB_USER" sudo && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
+
+## Create user-owned workspace
+RUN mkdir /workspace && chown -R ${NB_USER}:users /workspace
 
 USER ${NB_USER}
 

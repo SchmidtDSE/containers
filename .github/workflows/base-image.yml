@@ -19,7 +19,7 @@ jobs:
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
       - name: Build the Docker image
-        run: docker build -f Dockerfile . --tag ghcr.io/SchmidtDSE/base:latest
+        run: docker build -f Dockerfile . --tag ghcr.io/schmidtdse/base:latest
       - name: Publish
-        run: docker push ghcr.io/SchmidtDSE/base:latest
+        run: docker push ghcr.io/schmidtdse/base:latest
 

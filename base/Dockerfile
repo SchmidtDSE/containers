@@ -13,12 +13,16 @@ USER root
 RUN curl -fsSL https://code-server.dev/install.sh | sh && rm -rf .cache 
 
 # apt utilities, code-server setup
-RUN curl -s https://raw.githubusercontent.com/rocker-org/ml/refs/heads/master/install_utilities.sh | bash
+COPY install_utilities.sh /tmp/install_utilities.sh
+RUN bash /tmp/install_utilities.sh
 
 ## Grant user sudoer privileges
 RUN adduser "$NB_USER" sudo && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
 
 USER ${NB_USER}
+
+# install pixi
+RUN curl -fsSL https://pixi.sh/install.sh | PIXI_HOME=/opt/share/pixi bash
 
 COPY vscode-extensions.txt vscode-extensions.txt
 RUN xargs -n 1 code-server --install-extension < vscode-extensions.txt

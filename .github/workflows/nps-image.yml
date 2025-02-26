@@ -2,7 +2,7 @@ name: NPS Base
 on:
   workflow_dispatch: null
   push:
-    paths: ['base/*']
+    paths: ['nps/*']
 jobs:
   build:
     runs-on: ubuntu-latest

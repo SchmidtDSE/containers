@@ -1,4 +1,4 @@
-name: Base Image
+name: NPS Base
 on:
   workflow_dispatch: null
   push:

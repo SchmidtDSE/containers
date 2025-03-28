@@ -11,6 +11,7 @@ ENV PATH=/opt/share/pixi/bin:$PATH
 ## Grant user sudoer privileges
 USER root
 RUN adduser "$NB_USER" sudo && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
+RUN mkdir /opt/share && chown -R ${NB_USER}:users /opt/share
 
 USER ${NB_USER}
 

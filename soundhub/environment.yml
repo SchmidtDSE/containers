@@ -11,6 +11,7 @@ dependencies:
   - jupyter-vscode-proxy
   - minio
   - pip
+  - tensorflow-gpu
   - pip:
     - jupyter-keepalive
     - git+https://github.com/kitzeslab/bioacoustics-model-zoo

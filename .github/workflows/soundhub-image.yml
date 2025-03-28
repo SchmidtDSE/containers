@@ -19,7 +19,7 @@ jobs:
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
       - name: Build the Docker image
-        run: docker build nps --tag ghcr.io/schmidtdse/soundhub:latest
+        run: docker build soundhub --tag ghcr.io/schmidtdse/soundhub:latest
       - name: Publish
         run: docker push ghcr.io/schmidtdse/soundhub:latest
 

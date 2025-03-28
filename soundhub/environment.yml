@@ -1,0 +1,19 @@
+name: base 
+channels:
+  - conda-forge
+dependencies:
+  - sklearn
+  - glances
+  - numpy
+  - pandas
+  - git-filter-repo
+  - jupyter-resource-usage
+  - jupyter-vscode-proxy
+  - minio
+  - pip
+  - pip:
+    - jupyter-keepalive
+    - git+https://github.com/kitzeslab/bioacoustics-model-zoo
+    - opensoundscape
+  
+

@@ -12,6 +12,9 @@ dependencies:
   - minio
   - pip
   - tensorflow-gpu
+  - tensorflow-hub
+  - cudatoolkit-dev
+  - nvitop
   - pip:
     - jupyter-keepalive
     - git+https://github.com/kitzeslab/bioacoustics-model-zoo

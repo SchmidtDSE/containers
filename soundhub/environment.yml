@@ -2,7 +2,7 @@ name: base
 channels:
   - conda-forge
 dependencies:
-  - sklearn
+  - scikit-learn
   - glances
   - numpy
   - pandas

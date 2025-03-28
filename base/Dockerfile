@@ -9,8 +9,10 @@ ENV XDG_DATA_HOME=/opt/share
 ENV PATH=/opt/share/pixi/bin:$PATH
 
 ## Grant user sudoer privileges
+USER root
 RUN adduser "$NB_USER" sudo && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
 
+USER ${NB_USER}
 # code-server (VSCode)
 RUN sudo curl -fsSL https://code-server.dev/install.sh | sh && rm -rf .cache 
 

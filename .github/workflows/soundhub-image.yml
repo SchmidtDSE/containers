@@ -2,7 +2,7 @@ name: soundhub
 on:
   workflow_dispatch: null
   push:
-    paths: ['nps/*']
+    paths: ['soundhub/*']
 jobs:
   build:
     runs-on: ubuntu-latest

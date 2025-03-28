@@ -22,17 +22,17 @@ jobs:
           password: ${{secrets.GITHUB_TOKEN}}
 
       - name: Build the Docker image (cpu)
-        run: docker build soundhub --build-arg BASE=ghcr.io/schmidtdse/base --tag ghcr.io/schmidtdse/soundhub-cpu:latest
+        run: docker buildx build soundhub --build-arg BASE=ghcr.io/schmidtdse/base --tag ghcr.io/schmidtdse/soundhub-cpu:latest
       - name: Publish
         run: docker push ghcr.io/schmidtdse/soundhub-cpu:latest
 
       - name: Build the Docker image (torch)
-        run: docker build soundhub --build-arg BASE=ghcr.io/schmidtdse/base --tag ghcr.io/schmidtdse/soundhub-torch:latest
+        run: docker buildx build soundhub --build-arg BASE=ghcr.io/schmidtdse/base --tag ghcr.io/schmidtdse/soundhub-torch:latest
       - name: Publish
         run: docker push ghcr.io/schmidtdse/soundhub-torch:latest
 
       - name: Build the Docker image (tensorflow)
-        run: docker build soundhub --tag ghcr.io/schmidtdse/soundhub-tensorflow:latest
+        run: docker buildx build soundhub --tag ghcr.io/schmidtdse/soundhub-tensorflow:latest
       - name: Publish
         run: docker push ghcr.io/schmidtdse/soundhub-tensorflow:latest
 

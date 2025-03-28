@@ -2,7 +2,7 @@ name: CUDA
 on:
   workflow_dispatch: null
   push:
-    paths: ['cuda/*']
+    paths: ['base/*']
 jobs:
   build:
     runs-on: ubuntu-latest

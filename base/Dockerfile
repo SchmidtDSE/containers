@@ -13,15 +13,17 @@ USER root
 RUN adduser "$NB_USER" sudo && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
 
 USER ${NB_USER}
+
+
+## Create user-owned workspace
+RUN sudo mkdir /workspace && sudo chown -R ${NB_USER}:users /workspace
+
 # code-server (VSCode)
 RUN sudo curl -fsSL https://code-server.dev/install.sh | sh && rm -rf .cache 
 
 # apt utilities, code-server setup
 COPY install_utilities.sh /tmp/install_utilities.sh
 RUN sudo bash /tmp/install_utilities.sh
-
-## Create user-owned workspace
-RUN mkdir /workspace && chown -R ${NB_USER}:users /workspace
 
 # install pixi
 RUN curl -fsSL https://pixi.sh/install.sh | PIXI_HOME=/opt/share/pixi bash

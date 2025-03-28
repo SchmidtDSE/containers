@@ -11,7 +11,7 @@ dependencies:
   - jupyter-vscode-proxy
   - minio
   - pip
-  - tensorflow-gpu
+  - tensorflow
   - tensorflow-hub
   - cudatoolkit-dev
   - nvitop

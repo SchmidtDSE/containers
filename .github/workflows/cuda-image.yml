@@ -20,13 +20,13 @@ jobs:
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
 
-      - name: Build the Docker image
+      - name: Build the Docker image (torch)
         run: docker build base --build-arg BASE=quay.io/jupyter/pytorch-notebook:cuda12-ubuntu-24.04 --tag ghcr.io/schmidtdse/cuda:latest
-      - name: Publish
+      - name: Publish cuda (torch)
         run: docker push ghcr.io/schmidtdse/cuda:latest
       
-      - name: Build the Docker image
+      - name: Build the Docker image (tensorflow)
         run: docker build base --build-arg BASE=quay.io/jupyter/tensorflow-notebook:cuda-latest --tag ghcr.io/schmidtdse/tensorflow:latest
-      - name: Publish
+      - name: Publish tensorflow
         run: docker push ghcr.io/schmidtdse/tensorflow:latest
 

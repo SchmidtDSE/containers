@@ -31,8 +31,11 @@ jobs:
       - name: Publish
         run: docker push ghcr.io/schmidtdse/soundhub-torch:latest
 
+      - name: purge space
+        run: docker rmi -f $(docker images -q)
+
       - name: Build the Docker image (tensorflow)
         run: docker buildx build soundhub --build-arg BASE=ghcr.io/schmidtdse/tensorflow --tag ghcr.io/schmidtdse/soundhub-tensorflow:latest
       - name: Publish
-        run: docker push ghcr.io/schmidtdse/soundhub-tensorflow:latest
+        run: push ghcr.io/schmidtdse/soundhub-tensorflow:latest
 

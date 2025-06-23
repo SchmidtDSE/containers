@@ -8,4 +8,4 @@ ARG BASE=ghcr.io/schmidtdse/tensorflow
 
 FROM $BASE
 COPY environment.yml /tmp/environment.yml
-RUN conda update --all --solver=classic -n base -c conda-forge conda && conda env update --file /tmp/environment.yml
+RUN mamba env update --file /tmp/environment.yml

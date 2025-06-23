@@ -41,10 +41,6 @@ RUN apt-get update -q && apt-get -y install curl && apt-get clean && rm -rf /var
 RUN mkdir -p ${CODE_EXTENSIONSDIR} && chown -R ${NB_USER}:users ${CODE_EXTENSIONSDIR}
 RUN curl -fsSL https://code-server.dev/install.sh | sh && rm -rf /home/${NB_USER}/.cache 
 
-# Install R, RStudio
-RUN curl -s https://raw.githubusercontent.com/rocker-org/ml/refs/heads/master/install_r.sh | bash
-RUN curl -s https://raw.githubusercontent.com/rocker-org/ml/refs/heads/master/install_rstudio.sh | bash
-
 # Build the environment
 USER ${NB_USER}
 

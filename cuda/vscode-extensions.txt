@@ -1,5 +1,0 @@
-ms-python.python
-ms-toolsai.jupyter
-ms-vscode.live-server
-continue.continue
-

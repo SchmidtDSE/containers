@@ -1,0 +1,14 @@
+name: base 
+channels:
+  - conda-forge
+dependencies:
+  - glances
+  - git-filter-repo
+  - jupyter-resource-usage
+  - jupyter-vscode-proxy
+  - minio
+  - pypdf
+  - pip
+  - pip:
+    - jupyter-keepalive
+

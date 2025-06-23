@@ -2,7 +2,7 @@ name: CUDA
 on:
   workflow_dispatch: null
   push:
-    paths: ['base/*']
+    paths: ['cuda/*']
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -21,12 +21,12 @@ jobs:
           password: ${{secrets.GITHUB_TOKEN}}
 
       - name: Build the Docker image (torch)
-        run: docker build base --build-arg BASE=quay.io/jupyter/pytorch-notebook:cuda12-ubuntu-24.04 --tag ghcr.io/schmidtdse/cuda:latest
+        run: docker build cuda --build-arg BASE=quay.io/jupyter/pytorch-notebook:cuda12-ubuntu-24.04 --tag ghcr.io/schmidtdse/cuda:latest
       - name: Publish cuda (torch)
         run: docker push ghcr.io/schmidtdse/cuda:latest
       
       - name: Build the Docker image (tensorflow)
-        run: docker build base --build-arg BASE=quay.io/jupyter/tensorflow-notebook:cuda-latest --tag ghcr.io/schmidtdse/tensorflow:latest
+        run: docker build cuda --build-arg BASE=quay.io/jupyter/tensorflow-notebook:cuda-latest --tag ghcr.io/schmidtdse/tensorflow:latest
       - name: Publish tensorflow
         run: docker push ghcr.io/schmidtdse/tensorflow:latest
 

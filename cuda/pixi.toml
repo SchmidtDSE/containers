@@ -1,7 +1,7 @@
 [workspace]
 authors = ["Matt Fisher <mfisher87@gmail.com>"]
 channels = ["conda-forge", "nodefaults"]
-name = "schmidtdse"
+name = "schmidtdse-cuda"
 platforms = ["linux-64"]
 version = "0.1.0"
 
@@ -21,3 +21,9 @@ ruff = "*"
 pre-commit = "*"
 gh = "*"
 gh-scoped-creds = "*"
+
+[system-requirements]
+cuda = "12.6"
+
+[dependencies]
+pytorch-gpu = "*"

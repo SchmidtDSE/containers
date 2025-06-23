@@ -41,22 +41,18 @@ RUN apt-get update -q && apt-get -y install curl && apt-get clean && rm -rf /var
 RUN mkdir -p ${CODE_EXTENSIONSDIR} && chown -R ${NB_USER}:users ${CODE_EXTENSIONSDIR}
 RUN curl -fsSL https://code-server.dev/install.sh | sh && rm -rf /home/${NB_USER}/.cache 
 
-# Install R, RStudio
-RUN curl -s https://raw.githubusercontent.com/rocker-org/ml/refs/heads/master/install_r.sh | bash
-RUN curl -s https://raw.githubusercontent.com/rocker-org/ml/refs/heads/master/install_rstudio.sh | bash
-
 # Build the environment
 USER ${NB_USER}
 
 COPY vscode-extensions.txt /tmp/vscode-extensions.txt
 RUN xargs -n 1 code-server --extensions-dir ${CODE_EXTENSIONSDIR} --install-extension < /tmp/vscode-extensions.txt
 
-COPY pixi.toml .
+COPY --chown=${NB_UID}:${NB_UID} pixi.toml .
 RUN pixi install \
  && rm -rf ~/.cache/rattler
 
 # Set up shell activation script
- RUN pixi shell-hook -s bash > ./shell-hook
+RUN pixi shell-hook -s bash > ./shell-hook
 USER root
 ENV ENTRYPOINT_SCRIPT="/entrypoint.sh"
 RUN echo "#!/bin/bash" > ${ENTRYPOINT_SCRIPT}
@@ -65,7 +61,6 @@ RUN echo 'exec "$@"' >> ${ENTRYPOINT_SCRIPT}
 RUN chmod +x ${ENTRYPOINT_SCRIPT}
 
 USER ${NB_USER}
-WORKDIR "/home/${NB_USER}"
 EXPOSE 8888
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["jupyter", "lab", "--no-browser", "--ip=0.0.0.0"]

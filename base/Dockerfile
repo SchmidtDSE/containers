@@ -1,38 +1,71 @@
-ARG BASE=quay.io/jupyter/minimal-notebook:ubuntu-24.04
+FROM ghcr.io/prefix-dev/pixi:noble AS build
+LABEL "org.opencontainers.image.description"="A pixi-based Docker image for a robust GeoJupyter environment"
 
-# cuda image uses:
-# ARG BASE=quay.io/jupyter/pytorch-notebook:cuda12-ubuntu-24.04
-FROM $BASE
+# Use bash as default shell instead of sh
+ENV SHELL=/bin/bash
+# Don't buffer Python stdout/stderr output
+ENV PYTHONBUFFERED=1
+# Don't prompt in apt commands
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Make code-server extensions etc persist to container, not hub
-ENV XDG_DATA_HOME=/opt/share
-ENV PATH=/opt/share/pixi/bin:$PATH
+# Set up JupyterLab user
+ENV NB_USER=jovyan
+ENV NB_UID=1000
+ENV USER="${NB_USER}"
+ENV HOME="/home/${NB_USER}"
+RUN userdel ubuntu \
+ && groupadd \
+  --gid ${NB_UID} \
+  ${NB_USER} \
+ && useradd \
+  --comment "Default Jupyter user" \
+  --create-home \
+  --no-log-init \
+  --uid ${NB_UID} \
+  --gid ${NB_UID} \
+  --shell ${SHELL} \
+  ${NB_USER}
 
-## Grant user sudoer privileges
+ENV DOCKER_WORKDIR=/workdir
+WORKDIR ${DOCKER_WORKDIR}
+RUN chown ${NB_UID}:${NB_UID} ${DOCKER_WORKDIR}
+
+# this env var is recognized by jupyter-vscode-proxy:
+ENV CODE_EXTENSIONSDIR=/opt/share/code-server
+# put quarto on the path too
+ENV PATH=$PATH:/usr/lib/rstudio-server/bin/quarto/bin
+
 USER root
-RUN adduser "$NB_USER" sudo && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
-RUN mkdir /opt/share && chown -R ${NB_USER}:users /opt/share
+# code-server (VSCode)
+RUN apt-get update -q && apt-get -y install curl && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN mkdir -p ${CODE_EXTENSIONSDIR} && chown -R ${NB_USER}:users ${CODE_EXTENSIONSDIR}
+RUN curl -fsSL https://code-server.dev/install.sh | sh && rm -rf /home/${NB_USER}/.cache 
 
+# Install R, RStudio
+RUN curl -s https://raw.githubusercontent.com/rocker-org/ml/refs/heads/master/install_r.sh | bash
+RUN curl -s https://raw.githubusercontent.com/rocker-org/ml/refs/heads/master/install_rstudio.sh | bash
+
+# Build the environment
 USER ${NB_USER}
 
+COPY vscode-extensions.txt /tmp/vscode-extensions.txt
+RUN xargs -n 1 code-server --extensions-dir ${CODE_EXTENSIONSDIR} --install-extension < /tmp/vscode-extensions.txt
 
-## Create user-owned workspace
-RUN sudo mkdir /workspace && sudo chown -R ${NB_USER}:users /workspace
+COPY pixi.toml .
+RUN pixi install \
+ && rm -rf ~/.cache/rattler
 
-# code-server (VSCode)
-RUN sudo curl -fsSL https://code-server.dev/install.sh | sh && rm -rf .cache 
+# Set up shell activation script
+ RUN pixi shell-hook -s bash > ./shell-hook
+USER root
+ENV ENTRYPOINT_SCRIPT="/entrypoint.sh"
+RUN echo "#!/bin/bash" > ${ENTRYPOINT_SCRIPT}
+ RUN cat ${PWD}/shell-hook >> ${ENTRYPOINT_SCRIPT}
+RUN echo 'exec "$@"' >> ${ENTRYPOINT_SCRIPT}
+RUN chmod +x ${ENTRYPOINT_SCRIPT}
 
-# apt utilities, code-server setup
-COPY install_utilities.sh /tmp/install_utilities.sh
-RUN sudo bash /tmp/install_utilities.sh
-
-# install pixi
-RUN curl -fsSL https://pixi.sh/install.sh | PIXI_HOME=/opt/share/pixi bash
-
-COPY vscode-extensions.txt vscode-extensions.txt
-RUN xargs -n 1 code-server --install-extension < vscode-extensions.txt
-
-COPY environment.yml environment.yml
-RUN conda update --all --solver=classic -n base -c conda-forge conda && \
-    conda env update --file environment.yml
-
+USER ${NB_USER}
+WORKDIR "/home/${NB_USER}"
+EXPOSE 8888
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["jupyter", "lab", "--no-browser", "--ip=0.0.0.0"]

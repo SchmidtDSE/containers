@@ -25,5 +25,7 @@ RUN npm install -g @github/copilot
 RUN npm install -g @anthropic-ai/claude-code
 RUN npm install -g cline
 
+RUN curl -fsSL https://opencode.ai/install | bash
 
+ENTRYPOINT ["/bin/sh", "-c"]
 

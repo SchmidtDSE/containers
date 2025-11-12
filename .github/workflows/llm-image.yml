@@ -1,8 +1,8 @@
-name: NPS Base
+name: LLMs 
 on:
   workflow_dispatch: null
   push:
-    paths: ['nps/*']
+    paths: ['llm-clients/*']
 jobs:
   build:
     runs-on: ubuntu-latest

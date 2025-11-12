@@ -39,6 +39,10 @@ Add configuration here by volume linking a `.copilot/config.toml`  file
 Cline is an open-source vscode extension that also has a command-line tool.  Though development has focused on Anthropic's models, cline is the only one on this list that is unaffiliated with any specific AI lab and has excellent support for a broad base of models. 
 
 
+## claude
 
+```
+docker run --rm -ti -e ANTHROPIC_BASE_URL=https://ellm.nrp-nautilus.io -e ANTHROPIC_MODEL='glm-4.6' -e ANTHROPIC_AUTH_TOKEN=$ANTHROPIC_AUTH_TOKEN ghcr.io/schmidtdse/llm claude
+```
 
 

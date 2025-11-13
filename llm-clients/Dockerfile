@@ -1,35 +1,21 @@
-FROM ghcr.io/schmidtdse/base:latest
+FROM ubuntu:24.04
+ENV DEBIAN_FRONTEND=noninteractive
 
-ENV NVM_DIR=/opt/nvm
-USER root
-RUN mkdir /opt/nvm && chown -R 1000:1000 /opt/nvm
-
-
-
-RUN apt-get update && apt-get -y install libatomic1 python3-venv python-is-python3 build-essential unzip 
-
-# Add Node.js and npm to the PATH
-ENV NODE_VERSION=v25.1.0
-ENV NODE_PATH=$NVM_DIR/versions/node/$NODE_VERSION/lib/node_modules
-ENV PATH=$NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH
+# Install essentials and Claude Code (without post-install scripts)
+RUN apt-get update && apt-get install -y \
+    curl git sudo ca-certificates 
+    
+# Install Node.js 18.x (LTS) from NodeSource
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash - \
+    && apt-get install -y nodejs
 
 
-USER jovyan
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash \
-    && . "$NVM_DIR/nvm.sh" \
-    && nvm install $NODE_VERSION \
-    && nvm alias default node \
-    && nvm use default
-
-SHELL ["/bin/bash", "-c"]
 RUN npm install -g @openai/codex
 RUN npm install -g @github/copilot
 RUN npm install -g @anthropic-ai/claude-code
 RUN npm install -g cline
 RUN npm install -g opencode-ai
 
-# Consider a global config location like HOME?
-COPY opencode.json /workdir/.opencode.json
+COPY opencode.json /root/.config/opencode/opencode.json
 
-ENTRYPOINT ["/bin/sh", "-c"]
 

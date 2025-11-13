@@ -6,7 +6,7 @@
       "npm": "@ai-sdk/openai-compatible",
       "name": "NRP",
       "options": {
-        "baseURL": "https://ellm.nrp-nautious.io",
+        "baseURL": "https://ellm.nrp-nautius.io/v1/",
         "apiKey": "{env:NRP_API_KEY}"
       },
       "models": {

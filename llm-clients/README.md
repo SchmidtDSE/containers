@@ -33,8 +33,10 @@ Add configuration here by volume linking a `.copilot/config.toml`  file
 
 ## opencode.ai
 
+Uses the opencode.json config provided in this repo to access NRP models.  
+
 ```
-docker run --rm -ti -v $(pwd)/opencode.json:/workdir/.opencode.json -e NRP_API_KEY=$NRP_API_KEY ghcr.io/schmidtdse/llm opencode
+docker run --rm -ti -e NRP_API_KEY=$NRP_API_KEY ghcr.io/schmidtdse/llm opencode
 ```
 
 

@@ -4,6 +4,8 @@ ENV NVM_DIR=/opt/nvm
 USER root
 RUN mkdir /opt/nvm && chown -R 1000:1000 /opt/nvm
 
+
+
 RUN apt-get update && apt-get -y install libatomic1 python3-venv python-is-python3 build-essential unzip 
 
 # Add Node.js and npm to the PATH
@@ -25,6 +27,9 @@ RUN npm install -g @github/copilot
 RUN npm install -g @anthropic-ai/claude-code
 RUN npm install -g cline
 RUN npm install -g opencode-ai
+
+# Consider a global config location like HOME?
+COPY opencode.json /workdir/.opencode.json
 
 ENTRYPOINT ["/bin/sh", "-c"]
 

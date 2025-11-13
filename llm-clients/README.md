@@ -31,7 +31,11 @@ Copilot can also be configured to work with various local / open models, includi
 Add configuration here by volume linking a `.copilot/config.toml`  file
 ```
 
+## opencode.ai
 
+```
+docker run --rm -ti -v $(pwd)/opencode.json:/workdir/.opencode.json -e NRP_API_KEY=$NRP_API_KEY ghcr.io/schmidtdse/llm opencode
+```
 
 
 ## cline-cli
